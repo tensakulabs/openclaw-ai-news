@@ -1,0 +1,24 @@
+{
+  "name": "Morning AI Briefing",
+  "description": "Daily AI news summary delivered to Telegram",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 7 * * *",
+    "tz": "America/Los_Angeles"
+  },
+  "sessionTarget": "isolated",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "Run /ai-news for the last 24 hours. Summarize the top 10 most important items, prioritizing model releases and major announcements. Keep each summary to 1-2 sentences.",
+    "model": "anthropic/claude-sonnet-4-20250514",
+    "thinking": "medium",
+    "timeoutSeconds": 120
+  },
+  "delivery": {
+    "mode": "announce",
+    "channel": "telegram",
+    "to": "YOUR_TELEGRAM_CHAT_ID",
+    "bestEffort": true
+  },
+  "deleteAfterRun": false
+}
