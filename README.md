@@ -34,18 +34,36 @@ Or just ask: "What's new in AI?" / "Morning AI briefing"
 
 ### 3. Automate (Optional — OpenClaw)
 
-Add to your OpenClaw cron jobs for automatic morning briefings:
+Add an entry to `~/.openclaw/cron/jobs.json`:
 
-```bash
-openclaw cron add \
-  --name "AI Briefing" \
-  --cron "0 7 * * *" \
-  --isolated \
-  --message "Run /ai-news, summarize top 10 items" \
-  --announce \
-  --channel telegram \
-  --to "YOUR_CHAT_ID"
+```json
+{
+  "name": "morning-ai-briefing",
+  "agentId": "main",
+  "enabled": true,
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 7 * * *",
+    "tz": "America/Los_Angeles"
+  },
+  "sessionTarget": "isolated",
+  "wakeMode": "now",
+  "payload": {
+    "kind": "agentTurn",
+    "message": "Run /ai-news --save and save to ~/.openclaw/ai-news/"
+  },
+  "delivery": {
+    "mode": "announce",
+    "channel": "telegram",
+    "to": "YOUR_CHAT_ID"
+  }
+}
 ```
+
+**`to` format:**
+- Telegram DM: `"123456789"` (your numeric chat ID)
+- Telegram group topic: `"-1001234567890:topic:149"` (group ID + topic ID)
+- Discord channel: `"channel:1234567890123456789"`
 
 For Claude Code, invoke `/ai-news` manually or via system cron.
 
@@ -65,13 +83,17 @@ For Claude Code, invoke `/ai-news` manually or via system cron.
 
 | Lab | Feed | Covers |
 |-----|------|--------|
-| Anthropic | [News](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml) | Claude releases |
-| OpenAI | [Research](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_openai_research.xml) | GPT releases |
-| xAI | [News](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_xainews.xml) | Grok releases |
-| Google | [AI Blog](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_google_ai.xml) | Gemini, DeepMind |
-| Anthropic | [Changelog](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_changelog_claude_code.xml) | Claude Code updates |
+| Anthropic | [News](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml) | Company announcements |
+| Anthropic | [Claude Blog](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_claude.xml) | Product updates, guides |
+| Anthropic | [Red Team](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_red.xml) | Safety research |
+| OpenAI | [Blog](https://openai.com/blog/rss.xml) | Announcements (direct) |
+| OpenAI | [Research](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_openai_research.xml) | GPT papers ⚠️ currently empty |
+| xAI | [News](https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_xainews.xml) | Grok releases ⚠️ stale since Sept 2025 |
+| Google | [Developers Blog](https://developers.googleblog.com/feeds/posts/default) | Gemini, ADK (direct) |
+| Hugging Face | [Blog](https://huggingface.co/blog/feed.xml) | Model releases, research (direct) |
+| Anthropic | [Claude Code Changelog](https://code.claude.com/docs/en/changelog/rss.xml) | CLI updates (direct) |
 
-Lab blog feeds via [Olshansk/rss-feeds](https://github.com/Olshansk/rss-feeds).
+Feeds marked "direct" use official first-party RSS. Others via [Olshansk/rss-feeds](https://github.com/Olshansk/rss-feeds).
 
 ## Known Gaps
 
